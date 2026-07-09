@@ -1,0 +1,46 @@
+// Mnestra Memory Interface — language-neutral definition (IDL).
+//
+// Every binding (Python, C, Rust, Go, TypeScript, ...) implements exactly this surface.
+// The interface is the contract; the substrate (classical / photonic / quantum) is hidden
+// behind it, so a program written once is forward-compatible with future hardware.
+//
+// Wire payloads are encoded with the Mnestra Container Format (see mnestra-container-format.md).
+
+namespace mnestra;
+
+// A content address: BLAKE2b-128 of the canonical-encoded payload, lowercase hex (32 chars).
+typedef string Address;
+
+struct Pattern {
+  string text;            // human/semantic content (drives associative recall)
+  string summary;         // compact form carried in the global view
+  bytes  value;           // optional opaque payload
+  map<string, string> meta;
+}
+
+struct Recall {
+  Address address;
+  float   score;          // associative similarity in [0,1], substrate-weighted
+}
+
+struct GlobalView {       // the structure-complete "rest of the book"
+  string          title;
+  list<string>    outline;
+  list<string>    constraints;
+  map<string, string> dep_summaries;
+  list<Recall>    recalled;
+  int             filled;
+  int             total;
+}
+
+interface Memory {
+  Address      write(Address addr, Pattern p);
+  Pattern?     read(Address addr);
+  list<Recall> query(string cue, int k);     // content-addressed / associative recall
+  GlobalView   reconstruct();                // recover global structure from any point
+  map<string,string> stats();                // substrate health (capacity/coherence/fidelity)
+}
+
+// Substrate selector — same Memory interface behind each.
+enum Substrate { CLASSICAL, PHOTONIC, QUANTUM_AFC }
+Memory open(Substrate s);

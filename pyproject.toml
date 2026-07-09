@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mnestra"
+version = "0.1.0"
+description = "Substrate-agnostic, structure-complete memory fabric — read the whole book from any address; forward-compatible across classical, photonic, and quantum hardware."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [{ name = "Cognis Digital" }]
+keywords = ["memory", "quantum-memory", "photonic", "atomic-frequency-comb",
+            "llm", "inference-efficiency", "content-addressable", "holographic"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = []   # pure stdlib by design — the reference runs anywhere
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+mnestra-bench = "mnestra.bench:main"
+
+[tool.setuptools.packages.find]
+include = ["mnestra*"]

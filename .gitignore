@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+_kv_run.txt
+VALIDATION_run.txt
